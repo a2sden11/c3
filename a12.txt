@@ -1,0 +1,438 @@
+Assignment No. 1 – Student Database Using Dynamic Memory, Searching and
+Sorting
+1. What is dynamic memory allocation?
+Allocating memory during program execution rather than fixing it at compile time.
+2. What is a pointer?
+A variable that stores the memory address of another variable.
+3. What is malloc()?
+A C library function that allocates a block of memory dynamically.
+4. What is realloc()?
+It changes the size of a previously allocated memory block.
+5. What is free()?
+It releases dynamically allocated memory.
+6. What is Linear Search?
+It checks each record one by one until the required ID is found or the list ends.
+7. What is Binary Search?
+It searches a sorted list by repeatedly dividing the search range into two halves.
+8. Why must the records be sorted before Binary Search?
+Binary Search compares values to decide which half can be ignored, so the data must be ordered.
+9. What is the time complexity of Linear Search and Binary Search?
+Linear Search: O(n). Binary Search: O(log n) on sorted data.
+10. Why does the program use a structure for Student?
+The Student structure groups related fields—ID, name and CGPA—into one record.
+Q: Why does the addStudent function use realloc() instead of relying on a standard
+array with a fixed size?
+A: Using realloc() allows the database to grow dynamically as new students are added. This
+prevents hardcoded memory limits (avoiding array overflow) and optimizes memory usage by only
+allocating space when it is strictly needed.
+Q: How does the program know to dynamically allocate more memory when a new
+entry is added?
+A: The program compares the current number of students ( count ) with the total available slots
+( capacity ). When count == capacity , it triggers realloc() to increase the capacity by 1 and
+reallocate the memory block.
+Q: Before the Binary Search can successfully find ID 101, what logical step must the
+program execute first, and why?
+A: The program must call sortByID() to sort the array in ascending order. Binary search works
+by continually dividing the search space in half, which mathematically requires the data to be in a
+strictly sorted sequence.
+Q: Explain the swapping logic used inside the sortByID function.
+A: It uses a Bubble Sort approach, comparing adjacent elements ( students[j] and
+students[j+1] ). If the current ID is greater than the next ID, they are swapped using the built-in
+swap() function to bubble the largest values to the end.
+Q: What occurs logically if realloc() fails to assign new memory?
+A: If memory allocation fails, realloc() returns a NULL pointer. The program checks for this
+( if (!students) ), prints a "Memory allocation failed!" error message, and gracefully terminates
+the execution using exit(1) .
+
+
+
+Assignment No. 2 – Sorting Student Records
+1. What is sorting?
+Arranging data in a particular order, such as ascending or descending.
+2. What is Bubble Sort?
+It repeatedly compares adjacent elements and swaps them when they are in the wrong order.
+3. What is Selection Sort?
+It repeatedly selects the smallest or largest remaining element and puts it in its correct position.
+4. What is Insertion Sort?
+It builds a sorted portion by inserting each new element into its correct position.
+5. Which algorithm sorts names in this assignment?
+Bubble Sort.
+6. Which algorithm sorts CGPA in this assignment?
+Selection Sort.
+7. What is strcmp() used for?
+It compares two C-style strings; its result is used to decide alphabetical order.
+8. How does Selection Sort arrange CGPA in ascending order?
+It finds the smallest CGPA in the unsorted portion and swaps it into the next position.
+9. What is the average/worst-case time complexity of Bubble Sort and Selection Sort?
+Both are O(n²) in average and worst cases.
+Data Structures – Oral/Viva Preparation Page 3
+10. What is the difference between Bubble Sort and Selection Sort?
+Bubble Sort swaps adjacent out-of-order elements; Selection Sort finds the minimum or maximum and places it in
+position.
+Q: How does the Bubble Sort logic use strcmp() to arrange student names
+alphabetically?
+A: strcmp() compares two strings lexicographically. If strcmp(name1, name2) > 0 , it means
+name1 comes alphabetically after name2 . The program detects this and swaps them, gradually
+moving names closer to 'Z' to the end of the array.
+Q: How does the program switch between ascending and descending CGPA sorting
+based on user input?
+A: The function receives a boolean flag ( ascending ). Inside the loop, it evaluates: (ascending
+&& current < minOrMax) OR (!ascending && current > minOrMax) . This single compound
+condition dictates whether it looks for the smallest or the largest remaining value.
+Q: During the Selection Sort, how does the program identify the minimum or
+maximum CGPA value before swapping?
+A: It initializes a tracker variable ( minOrMax = i ) at the start of the unsorted section. It then
+iterates through the remaining elements ( j ); if it finds an element that is smaller/larger than the
+current tracked element, it updates minOrMax = j . The swap only happens after the loop finishes.
+Q: What is the purpose of the cin.ignore() function right before taking the student's
+name as input?
+A: When taking the integer id via cin , a newline character remains in the input buffer. If not
+ignored, the subsequent cin.getline() would immediately read that newline as an empty string.
+cin.ignore() flushes this leftover character.
+Q: Why is it necessary to call free(students) at the very end of the program?
+A: Because the memory for the student array was dynamically allocated on the heap using
+realloc() . Calling free() releases that memory back to the operating system, preventing
+memory leaks
+
+
+
+Assignment No. 3 – Stack ADT and Infix-to-Postfix Conversion
+1. What is a Stack?
+A linear data structure in which insertion and deletion take place at the top.
+2. What is LIFO?
+Last In, First Out: the last element inserted is the first one removed.
+3. What is an ADT?
+An Abstract Data Type defines the data and operations, without prescribing their implementation.
+4. What are the basic Stack operations?
+Push, Pop and checking or viewing the top element.
+5. What is Push?
+Adding an element to the top of the stack.
+6. What is Pop?
+Removing and returning the top element from the stack.
+7. What is Stack Underflow?
+Trying to pop an element when the stack is empty.
+8. What is an Infix expression?
+An expression where the operator is between operands, for example A+B.
+9. What is a Postfix expression?
+An expression where the operator follows its operands, for example AB+.
+10. Why is a Stack used for Infix-to-Postfix conversion?
+It temporarily stores operators and parentheses until they can be placed in the correct postfix order.
+Q: In the output where (a+b) is converted to ab+ , how does the stack logic handle the
+closing parenthesis?
+A: When it encounters a ) , it triggers a loop that continuously pops operators from the stack and
+appends them to the postfix string. This loop stops the moment it pops the matching opening
+parenthesis ( .
+Data Structures and Algorithms Viva Guide Page 2 of 8
+Q: Why is the stack implemented using a linked list rather than an array?
+A: A linked list allows the stack to grow and shrink dynamically without a predefined size limit.
+Memory is allocated strictly when a node is pushed and deallocated when a node is popped, making
+it highly memory-efficient.
+Q: Walk through the logic in the push function.
+A: First, a newnode is dynamically created. Its data is assigned the character. Its next pointer is
+set to point to the current *top (the old top of the stack). Finally, the *top pointer is updated to
+point to this new node.
+Q: What is the logic behind capturing and returning the data value in the pop
+function?
+A: Before deleting the top node, its character value must be stored in a temporary variable ( x ). The
+top pointer is moved to the next node, the old node is deleted from memory, and x is returned so
+it can be appended to the postfix output.
+Q: How does the stackempty function verify whether the stack is empty?
+A: It simply checks if the top pointer is NULL . If it is NULL , the stack has no nodes, and it returns 1
+(true); otherwise, it returns 0 (false).
+Assignment No.4: Circular Queue
+Q: How does the deleteCQ function determine the next position for the front pointer?
+A: If front is at the very end of the array ( n - 1 ), the circular logic wraps it back around to
+index 0 . For all other positions, it simply increments front by 1.
+Q: Explain the exact condition in the insertCQ logic that triggers a "Queue Overflow"
+message.
+A: Overflow happens in two cases: 1) The array is naturally full ( front == 0 && rear == n-1 ),
+or 2) The rear pointer has wrapped around the array and is currently sitting immediately behind
+the front pointer ( front == rear + 1 ).
+Q: When displaying the queue, if the rear has wrapped around, how does displayCQ
+print elements correctly?
+A: It uses an else block that first prints elements from the front index up to the physical end of
+the array ( n - 1 ). It then resets the tracker ( f = 0 ) and prints from the beginning of the array
+up to the rear index.
+Data Structures and Algorithms Viva Guide Page 3 of 8
+Q: Why does the program reset both front and rear to -1 when deleting the last
+element?
+A: The condition front == rear indicates there is only one element left. Upon deleting it, the
+queue becomes completely empty. Resetting both pointers to -1 restores the queue to its initial
+empty state.
+Q: How is the modulo arithmetic or wrap-around logic applied during insertion?
+A: Instead of using the `%` operator, it explicitly checks if (rear == n - 1) . If true, the array
+boundary is reached, and rear is forced to 0 . Otherwise, it increments normally
+
+
+Assignment No. 4 – Circular Queue
+1. What is a Queue?
+A linear data structure that follows First In, First Out (FIFO).
+2. What is a Circular Queue?
+A queue in which the last array position connects logically back to the first position.
+3. What is FIFO?
+First In, First Out: the first element inserted is the first one removed.
+4. What is Enqueue?
+Inserting an element into the queue.
+5. What is Dequeue?
+Removing an element from the front of the queue.
+6. What are Front and Rear?
+Front identifies the first element; Rear identifies the last element.
+7. What is Queue Overflow?
+Trying to insert an element when the circular queue is full.
+8. What is Queue Underflow?
+Trying to delete an element when the queue is empty.
+Data Structures – Oral/Viva Preparation Page 4
+9. What is the empty condition in this program?
+front == -1.
+10. Why use a Circular Queue instead of a simple linear array queue?
+It reuses positions freed at the beginning of the array, reducing wasted space.
+
+
+
+Assignment No. 5 – Binary Search Tree and Its Operations
+1. What is a Tree?
+A non-linear data structure made of nodes connected by edges.
+2. What is a Binary Search Tree (BST)?
+A binary tree where smaller keys go to the left and larger keys go to the right of a node.
+3. What is the Root Node?
+The topmost node of the tree.
+4. What is a Leaf Node?
+A node that has no children.
+5. What is Inorder Traversal?
+Visiting Left subtree, Root, then Right subtree; in a BST it gives keys in sorted order.
+6. What is Preorder Traversal?
+Visiting Root, Left subtree, then Right subtree.
+7. What is Postorder Traversal?
+Visiting Left subtree, Right subtree, then Root.
+8. How does deletion work when a BST node has two children?
+Replace its key with its inorder successor (the minimum in the right subtree), then delete that successor.
+9. What is the depth/height calculation used in this program?
+For an empty node it returns 0; otherwise it returns 1 plus the maximum depth of its left and right subtrees.
+10. What is Level Order Traversal and which data structure does the program use?
+It visits nodes level by level and uses a queue (deque in the Python program).
+Q: How does the _insert logic identify and handle duplicate entries (like '70' in the
+output)?
+A: As it traverses down the tree checking key < node.key and key > node.key , if it finds a
+node where the values are exactly equal, the else block executes. It prints a warning message and
+simply returns the existing node without allocating a new one.
+Q: When deleting a node with two children, why does the logic search for the minimum
+node in the right subtree?
+A: To maintain the strict properties of a BST, the deleted node must be replaced by its Inorder
+Successor (the smallest value that is still strictly larger than the node's left subtree). The minimum
+node in the right subtree perfectly satisfies this condition.
+Q: Explain the recursive logic used in the depth() function.
+A: It evaluates the depth of both the left and right subtrees recursively. It finds the maximum of
+these two depths and adds 1 (to account for the current node). If a node is None , it returns 0 (the
+base case).
+Q: How does the program use a deque to print nodes level-wise?
+A: It initializes a queue with the root node. In a loop, it processes the queue by determining the
+current level_size , popping that many nodes, recording their keys, and pushing their non-null
+left and right children into the queue for the next iteration.
+Q: How does the _mirror_node function create the mirror image of the tree?
+A: It processes the tree recursively by creating a new node, but it purposefully assigns the recursive
+result of the original node.right to the new node's left child, and node.left to the right
+child, physically flipping the tree
+
+
+
+Assignment No. 6 – College Campus Graph and Minimum Spanning Tree
+1. What is a Graph?
+A non-linear structure consisting of vertices (nodes) and edges (connections).
+2. What is a Vertex and what is an Edge?
+A vertex is a node in the graph; an edge connects two vertices.
+3. What is a Weighted Graph?
+A graph whose edges have values such as distance or cost.
+4. What is an Adjacency Matrix?
+A two-dimensional array in which a cell records the edge or weight between two vertices.
+5. What is an Adjacency List?
+A representation that stores, for each vertex, the vertices connected to it.
+6. What is a Minimum Spanning Tree (MST)?
+A set of edges connecting all vertices of a connected, weighted, undirected graph with minimum total weight and no
+cycles.
+7. How many edges does an MST have for V vertices?
+V − 1 edges.
+Data Structures – Oral/Viva Preparation Page 5
+8. What is Kruskal's Algorithm?
+It sorts edges by weight and adds the next lightest edge if it does not create a cycle.
+9. What is Prim's Algorithm?
+It starts from a vertex and repeatedly adds the cheapest edge connecting the current tree to a vertex outside it.
+10. What is the main difference between Prim's and Kruskal's algorithms?
+Prim grows one tree from a starting vertex; Kruskal selects globally sorted edges while joining separate components.
+Q: How does the Adjacency Matrix logic represent paths between departments?
+A: A value of 0 at matrix[u][v] indicates there is no direct path. Any non-zero integer
+represents a valid path, where the integer itself signifies the distance (weight) between department
+u and department v .
+Q: In Kruskal's algorithm, what role do find and union play in preventing cycles?
+A: find traces nodes back to their root parents. If the edge being evaluated connects two nodes
+with the exact same root ( find(u) == find(v) ), it means a cycle would form. union merges two
+disjoint sets into one when a valid, non-cyclic edge is added.
+Q: Why must edges be sorted by weight before executing Kruskal's algorithm?
+A: Kruskal's algorithm is a greedy approach. It mandates evaluating edges from the absolute
+shortest to the longest to guarantee that the final spanning tree has the minimum possible total
+weight.
+Q: Explain how Prim's algorithm uses the key array and mst_set .
+A: key tracks the minimum distance required to connect each node to the growing MST.
+mst_set is a boolean array tracking which nodes are already secured in the MST. At each step, it
+greedily selects the node not in mst_set that has the absolute smallest key value.
+Q: Will Kruskal's and Prim's algorithms always yield the exact same Total Distance?
+A: Yes. While they may select slightly different edges if multiple edges have identical weights, the
+mathematical property of Minimum Spanning Trees guarantees that the final optimized Total
+Distance will always be identical
+
+
+Assignment No. 7 – Heap Sort
+1. What is a Heap?
+A complete binary tree that follows the heap property.
+2. What is a Max Heap?
+A heap in which every parent is greater than or equal to its children.
+3. What is a Min Heap?
+A heap in which every parent is less than or equal to its children.
+4. What is Heap Sort?
+A comparison-based sorting algorithm that uses a heap to order elements.
+5. Which heap does this assignment use?
+A Max Heap, to sort the array in ascending order.
+6. What is heapify?
+The operation that restores the heap property in a subtree.
+7. Why is the largest element swapped with the last element in this program?
+The root of a Max Heap is the largest; moving it to the end places it in its final sorted position.
+8. What are the left and right child indices in the array representation?
+For index i: left child = 2i + 1; right child = 2i + 2.
+9. What is the time complexity of Heap Sort?
+O(n log n) in best, average and worst cases.
+10. Is Heap Sort stable?
+No. Equal elements are not guaranteed to keep their original relative order.
+Q: How are the logical indices for a node's left and right children calculated?
+A: When a complete binary tree is flattened into a 0-indexed array, for any node at index i , its left
+child is always found at index 2*i + 1 , and its right child is at 2*i + 2 .
+Q: Why is the largest number placed at the root of the constructed Max-Heap?
+A: A Max-Heap enforces the rule that every parent node must be greater than or equal to its
+children. By repeatedly applying heapify from the bottom up, the absolute maximum value
+bubbles up to index 0 (the root).
+Data Structures and Algorithms Viva Guide Page 5 of 8
+Q: Explain the swapping logic during the extraction phase of Heap Sort.
+A: Since the root (index 0) is guaranteed to be the largest unsorted element, it is swapped with the
+element at the very end of the active array. The active array size is then reduced by 1, permanently
+locking that maximum element into its correct sorted position.
+Q: How does heapify ensure the subtree remains valid after a swap?
+A: When a small element is swapped to the root, it violates the heap property. heapify compares
+it to its two children, identifies the largest, swaps them if necessary, and then recursively calls
+heapify on the affected child branch to push the small element down.
+Q: Why does the initial Max-Heap construction loop start from n//2 - 1 ?
+A: All elements from index n//2 to n-1 are leaf nodes, meaning they have no children and are
+already trivial heaps. The algorithm optimizes by starting at the last non-leaf node and working
+backward to the root
+
+
+
+Assignment No. 8 – Merge Sort for Online Orders
+1. What is Merge Sort?
+A sorting algorithm that divides data into halves, sorts each half and merges the sorted halves.
+2. Which design technique does Merge Sort use?
+Divide and Conquer.
+3. What is Divide and Conquer?
+Break a problem into smaller subproblems, solve them, then combine their results.
+4. What is Recursion?
+A function calling itself to solve smaller versions of a problem.
+5. What is the base condition in this Merge Sort?
+The recursion stops when left is no longer less than right, meaning the section has at most one element.
+6. What is the purpose of the merge() function?
+It combines two already-sorted subarrays into one sorted section.
+Data Structures – Oral/Viva Preparation Page 6
+7. How are online orders compared in this assignment?
+By their estimated delivery time, stored as the third field of each order tuple.
+8. What is the time complexity of Merge Sort?
+O(n log n) in best, average and worst cases.
+9. What is the auxiliary space complexity of this Merge Sort?
+O(n), because temporary subarrays are created while merging.
+10. Is Merge Sort stable?
+Yes. This implementation chooses the left item first when delivery times are equal, preserving their relative order.
+
+
+
+Assignment No. 9 – Fractional Knapsack
+1. What is the Knapsack Problem?
+Selecting items with weights and profits to maximize profit without exceeding a capacity.
+2. What is Fractional Knapsack?
+A knapsack problem where an item may be taken completely or partially.
+3. What is a Greedy Algorithm?
+An approach that repeatedly makes the best local choice according to a chosen rule.
+4. Which greedy rule is used in this assignment?
+Choose parcels in descending order of profit-to-weight ratio.
+5. How is the profit-to-weight ratio calculated?
+Profit divided by weight.
+6. Why are items sorted by this ratio?
+To get the greatest profit per unit of capacity first.
+7. Can an item be divided in Fractional Knapsack?
+Yes. The algorithm can take a fraction of the final parcel.
+8. What is the difference between Fractional and 0/1 Knapsack?
+Fractional allows partial items; 0/1 requires taking an item entirely or not taking it.
+9. How is the profit from a partial item calculated?
+Fraction taken × item's full profit, where fraction = remaining capacity ÷ item weight.
+10. What is the time complexity of this implementation?
+O(n log n), mainly because it sorts the items by ratio.
+Q: How does calculating the profit-to-weight ratio help maximize total profit?
+A: The greedy strategy dictates selecting items that offer the most value per unit of capacity. The
+profit-to-weight ratio identifies these high-value dense items, ensuring the limited truck space is
+filled as profitably as possible.
+Q: Why does the program sort the ratio list in reverse (descending) order?
+A: Sorting descending puts the parcels with the absolute highest profit-to-weight ratios at the front
+of the list (index 0), allowing the greedy loop to effortlessly evaluate and select the best items first.
+Q: How is the percentage calculated when a parcel exceeds remaining capacity (e.g.,
+66.67%)?
+A: When the full parcel won't fit ( w > capacity ), it calculates the fraction by dividing the
+remaining truck capacity by the item's total weight w . It then multiplies the total profit of that
+item by this exact decimal fraction.
+Q: What is the logical exit condition for the loop if the truck fills up early?
+A: The loop includes a guard clause: if capacity <= 0: break . Once the capacity drops to zero,
+the truck is entirely full, and iterating further is useless, so it terminates the loop early.
+Q: Could this ratio-based logic work if the company was strictly forbidden from
+splitting parcels?
+A: No. If items cannot be split, it becomes the "0/1 Knapsack Problem." The greedy ratio approach
+fails here because leaving empty space in the truck might yield less profit than picking a slightly less
+dense, but better-fitting, combination of whole items. Dynamic Programming is required instead
+
+
+Assignment No. 10 – Naive String Matching Algorithm
+1. What is String Matching?
+Finding occurrences of a smaller pattern string inside a larger text string.
+2. What is the text?
+The full string in which the search is performed.
+3. What is the pattern?
+The smaller string that the algorithm tries to find in the text.
+4. What is the Naive String Matching Algorithm?
+It compares the pattern with the text at every possible starting position.
+5. How many possible starting positions are checked?
+n − m + 1, when text length is n and pattern length is m and m is not greater than n.
+Data Structures – Oral/Viva Preparation Page 7
+6. What does text[i:i+m] mean in Python?
+It extracts the substring of length m starting at index i.
+7. What does append() do in this program?
+It adds a matching starting index to the positions list.
+8. Can this algorithm find more than one occurrence?
+Yes. It checks every possible starting position and records all matches.
+9. What is the worst-case time complexity?
+O((n − m + 1)m), commonly written as O(nm).
+10. What happens if the pattern is longer than the text?
+A match is impossible; the program displays an error before searching.
+Q: Explain the reasoning behind the loop condition range(n - m + 1) .
+A: n is text length and m is pattern length. The search window needs exactly m characters.
+Stopping at n - m ensures that when we take a slice of length m starting from the final index, we
+don't cause an "index out of bounds" error.
+Data Structures and Algorithms Viva Guide Page 7 of 8
+Q: How does Python's string slicing check for a match at each index?
+A: The syntax text[i:i+m] extracts a temporary substring starting at index i and ending at
+i+m . This dynamically generated substring is then directly compared against the pattern using
+the equality operator == .
+Q: How did the sliding window logic arrive at index 19 for "algo"?
+A: The loop increments i from 0. At i = 19 , the slice text[19:23] isolates the characters
+"algo". The condition "algo" == "algo" evaluates to true, registering a match at that starting
+index.
+Q: What logical error is prevented by checking if len(pattern) > len(text) ?
+A: It prevents the algorithm from running a futile search. A pattern physically cannot exist inside a
+text that has fewer characters than the pattern itself. It stops the loop before it even begins.
+Q: How does the program handle multiple matches of the same pattern?
+A: Instead of returning out of the function immediately upon finding the first match, it appends the
+current index i to a positions list and continues the loop until the end of the text. It finally
+returns the list of all collected indices
+
+

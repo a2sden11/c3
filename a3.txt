@@ -1,0 +1,186 @@
+/*
+Assignment 3
+Title: Write a program to Implement stack as a ADT and perform following operation 1. Infix to postfix expression
+*/
+
+#include <iostream>
+#include <cstring>
+#include <cmath>
+using namespace std;
+
+class stack
+{
+private:
+    typedef struct stack1
+    {
+        int data;
+        struct stack1 *next;
+    } node;
+
+    node *top;
+
+public:
+    stack();
+    ~stack();
+    void push(char, node **);
+    int pop(node **);
+    int stackempty(node *);
+    void postfix();
+};
+
+int main()
+{
+    int ch;
+    stack st;
+
+    do
+    {
+        cout << "\n1. Infix to postfix";
+        cout << "\n2. Exit";
+        cout << "\nEnter your choice: ";
+        cin >> ch;
+
+        switch (ch)
+        {
+            case 1:
+                st.postfix();
+                break;
+
+            case 2:
+                break;
+
+            default:
+                cout << "Invalid choice!";
+        }
+
+    } while (ch != 2);
+
+    return 0;
+}
+
+stack::stack()
+{
+    top = NULL;
+}
+
+stack::~stack()
+{
+    node *temp;
+
+    while (top != NULL)
+    {
+        temp = top;
+        top = top->next;
+        delete temp;
+    }
+}
+
+void stack::push(char x, node **top)
+{
+    node *newnode;
+
+    newnode = new node;
+    newnode->data = x;
+    newnode->next = *top;
+    *top = newnode;
+}
+
+int stack::pop(node **top)
+{
+    if (*top == NULL)
+        return -1;
+
+    int x;
+    node *temp;
+
+    x = (*top)->data;
+    temp = *top;
+    *top = (*top)->next;
+
+    delete temp;
+
+    return x;
+}
+
+int stack::stackempty(node *temp)
+{
+    if (temp == NULL)
+        return 1;
+    else
+        return 0;
+}
+
+void stack::postfix()
+{
+    char exp[40];
+    int j = 0;
+    char ch;
+    char post[40];
+
+    cout << "\nEnter expression: ";
+    cin >> exp;
+
+    int length = strlen(exp);
+
+    cout << "\nThe postfix is: ";
+
+    for (int i = 0; i < length; i++)
+    {
+        ch = exp[i];
+
+        if (ch == '(')
+        {
+            push(ch, &top);
+        }
+        else if (ch == '+' || ch == '-' || ch == '*' || ch == '/')
+        {
+            while (!stackempty(top) && top->data != '(' &&
+                   ((ch == '+' || ch == '-') &&
+                    (top->data == '+' || top->data == '-' ||
+                     top->data == '*' || top->data == '/')) ||
+                   ((ch == '*' || ch == '/') &&
+                    (top != NULL && top->data != '(' &&
+                     (top->data == '*' || top->data == '/'))))
+            {
+                char op = pop(&top);
+                post[j++] = op;
+                cout << op;
+            }
+
+            push(ch, &top);
+        }
+        else if (ch == ')')
+        {
+            while (!stackempty(top) && top->data != '(')
+            {
+                char op = pop(&top);
+                post[j++] = op;
+                cout << op;
+            }
+
+            if (!stackempty(top))
+                pop(&top);
+        }
+        else
+        {
+            post[j++] = ch;
+            cout << ch;
+        }
+    }
+
+    while (!stackempty(top))
+    {
+        char op = pop(&top);
+
+        if (op != '(')
+        {
+            post[j++] = op;
+            cout << op;
+        }
+    }
+
+    post[j] = '\0';
+
+    cout << "\n";
+}
+
